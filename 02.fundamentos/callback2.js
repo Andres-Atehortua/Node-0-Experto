@@ -24,14 +24,14 @@ let salarios = [
   },
 ];
 
-getEmpleadoById = (id, cb) => {
+let getEmpleadoById = (id, cb) => {
   let empleadoDB = empleados.find((empleado) => empleado.id === id);
   !empleadoDB
     ? cb(`No existe ningún empleado con el id: ${id}`)
     : cb(null, empleadoDB);
 };
 
-getSalarioByEmpleado = (empleado, cb) => {
+let getSalarioByEmpleado = (empleado, cb) => {
   let salarioDB = salarios.find((salario) => salario.id === empleado.id);
   !salarioDB
     ? cb(`No existe salario para el empleado: ${empleado.name}`)
