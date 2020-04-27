@@ -1,3 +1,5 @@
+// Requireds
+require("colors/safe");
 const argv = require("./config/yargs.config");
 
 const { crearArchivo, listarTabla } = require("./multiplicar");
@@ -17,7 +19,12 @@ switch (comando) {
     break;
   case "crear":
     crearArchivo(argv.base, argv.limite)
-      .then((archivo) => console.log(`Archivo creado con el nombre ${archivo}`))
+      .then((archivo) =>
+        console.log(
+          `Archivo creado con el nombre ${archivo.underline.green.bold}`.blue
+            .bold.underline
+        )
+      )
       .catch((error) => console.log(error));
     break;
   default:

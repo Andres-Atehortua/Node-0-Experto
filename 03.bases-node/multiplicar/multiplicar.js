@@ -1,7 +1,10 @@
 // Requireds
 const fs = require("fs");
+require("colors/safe");
 
 let crearArchivo = (base, limite = 10) => {
+  console.log("Ejecutando creación del archivo.".white.underline.bold);
+
   return new Promise((resolve, reject) => {
     if (!Number(base)) {
       reject(`${base} no es un número`);
