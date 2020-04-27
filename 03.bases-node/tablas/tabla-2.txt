@@ -1,0 +1,11 @@
+2 multiplicado por 0 es igual a 0
+2 multiplicado por 1 es igual a 2
+2 multiplicado por 2 es igual a 4
+2 multiplicado por 3 es igual a 6
+2 multiplicado por 4 es igual a 8
+2 multiplicado por 5 es igual a 10
+2 multiplicado por 6 es igual a 12
+2 multiplicado por 7 es igual a 14
+2 multiplicado por 8 es igual a 16
+2 multiplicado por 9 es igual a 18
+2 multiplicado por 10 es igual a 20
