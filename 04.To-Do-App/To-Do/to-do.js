@@ -66,9 +66,17 @@ const deleteTask = (description) => {
     return false;
   }
 };
+
+const showDone = () => {
+  loadDB();
+  let doneTasks = toDoList.filter((task) => task.completed);
+  return doneTasks;
+};
+
 module.exports = {
   create,
   getList,
   updateTask,
   deleteTask,
+  showDone,
 };

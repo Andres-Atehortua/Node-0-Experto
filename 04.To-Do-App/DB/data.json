@@ -1,4 +1,1 @@
-[
-  { "description": "IR DE FIESTA", "completed": false },
-  { "description": "SALTAR", "completed": false }
-]
+[{"description":"IR DE FIESTA","completed":false},{"description":"SALTAR","completed":false},{"description":"JUGAR","completed":true}]

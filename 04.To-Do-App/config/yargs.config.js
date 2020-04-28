@@ -14,6 +14,7 @@ const argv = require("yargs")
   .command("create", "Create new task", { description })
   .command("update", "Update one task", { description, completed })
   .command("delete", "Delete one task", { description })
+  .command("showDone", "Show all done tasks")
   .help().argv;
 
 module.exports = { argv };

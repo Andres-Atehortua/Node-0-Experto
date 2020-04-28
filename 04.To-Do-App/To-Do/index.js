@@ -3,4 +3,5 @@ module.exports = {
   getList: require("./to-do").getList,
   updateTask: require("./to-do").updateTask,
   deleteTask: require("./to-do").deleteTask,
+  showDone: require("./to-do").showDone,
 };
