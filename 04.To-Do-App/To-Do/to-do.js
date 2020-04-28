@@ -73,10 +73,16 @@ const showDone = () => {
   return doneTasks;
 };
 
+const showUndone = () => {
+  loadDB();
+  let undoneTasks = toDoList.filter((task) => !task.completed);
+  return undoneTasks;
+};
 module.exports = {
   create,
   getList,
   updateTask,
   deleteTask,
   showDone,
+  showUndone,
 };

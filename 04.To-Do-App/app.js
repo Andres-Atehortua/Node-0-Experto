@@ -7,6 +7,7 @@ const {
   updateTask,
   deleteTask,
   showDone,
+  showUndone,
 } = require("./To-Do");
 let comando = argv._[0];
 
@@ -22,8 +23,8 @@ switch (comando) {
       console.log(task.description.yellow.underline);
       console.log(
         task.completed
-          ? `Status ${task.completed}`.green
-          : `Status ${task.completed}`.red
+          ? `Done: ${task.completed}`.green
+          : `Done: ${task.completed}`.red
       );
       console.log("===================".blue.bold);
     }
@@ -50,10 +51,22 @@ switch (comando) {
       for (let task of doneTasks) {
         console.log("=======Done-Tasks=======".blue.bold);
         console.log(task.description.yellow.underline);
-        console.log(`Status ${task.completed}`.green);
+        console.log(`Done: ${task.completed}`.green);
         console.log("========================".blue.bold);
       }
     } else console.log("There are no tasks done.".red);
+
+    break;
+  case "showUndone":
+    let undoneTasks = showUndone();
+    if (undoneTasks.length > 0) {
+      for (let task of undoneTasks) {
+        console.log("=======Undone-Tasks=======".blue.bold);
+        console.log(task.description.yellow.underline);
+        console.log(`Done: ${task.completed}`.red);
+        console.log("==========================".blue.bold);
+      }
+    } else console.log("There are no tasks undone.".red);
 
     break;
 
