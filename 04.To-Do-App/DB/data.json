@@ -1,8 +1,4 @@
 [
-  { "description": "Sacar al gato de la nevera", "completed": false },
-  {
-    "description": "Ver Sex Education a ver si mejoro mi vida sexual",
-    "completed": false
-  },
-  { "description": "Descargar cursos online", "completed": false }
+  { "description": "IR DE FIESTA", "completed": false },
+  { "description": "SALTAR", "completed": false }
 ]

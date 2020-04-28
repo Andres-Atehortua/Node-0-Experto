@@ -1,7 +1,7 @@
 // Requireds
 require("colors");
 const argv = require("./config/yargs.config").argv;
-const { create, getList } = require("./To-Do");
+const { create, getList, updateTask, deleteTask } = require("./To-Do");
 let comando = argv._[0];
 
 switch (comando) {
@@ -23,9 +23,21 @@ switch (comando) {
     }
     break;
   case "update":
-    console.log("Update");
+    let updatedTask = updateTask(argv.description, argv.completed);
+    console.log(
+      updatedTask
+        ? `Updated: ${updatedTask}`.green
+        : `Updated: ${updatedTask}`.red
+    );
+    break;
   case "delete":
-    console.log("Delete");
+    let deletedTask = deleteTask(argv.description);
+    console.log(
+      deletedTask
+        ? `Deleted: ${deletedTask}`.green
+        : `Deleted: ${deletedTask}`.red
+    );
+    break;
 
   default:
     console.log(`Unknown Command: ${comando}`);
