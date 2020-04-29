@@ -1,17 +1,20 @@
-const axios = require("axios");
 const argv = require("./config/yargs.config");
+const { getLatLng } = require("./services/place.service");
+const { getWheater } = require("./services/wheater.service");
 
-let encodedURL = encodeURI(argv.direccion);
-console.log(encodedURL);
+// getLatLng(argv.direccion).then(console.log);
+// getWheater(40.75, -74.0).then(console.log).catch(console.log);
 
-const instance = axios.create({
-  baseURL: `https://devru-latitude-longitude-find-v1.p.rapidapi.com/latlon.php?location=${encodedURL}`,
-  headers: {
-    "X-RapidAPI-Key": "c9193e237bmshe9703bf09bd9605p1abc67jsn0fbe5b30a1c9",
-  },
-});
+const getInfo = async (city) => {
+  try {
+    const cityInfo = await getLatLng(city);
+    let { lat, lon, direction } = cityInfo;
+    const weatherInfo = await getWheater(lat, lon);
+    return `La temperatura para la ciudad ${direction} es de ${weatherInfo}°C.`;
+  } catch (error) {
+    // console.log("Error", error);
+    return `No se ha podido obtener la información para la ciudad ${city}`;
+  }
+};
 
-instance
-  .get()
-  .then((response) => console.log(response.data.Results[0]))
-  .catch((err) => console.log(err));
+getInfo(argv.direccion).then(console.log).catch(console.log);
