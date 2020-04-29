@@ -1,4 +1,5 @@
 const argv = require("./config/yargs.config");
+require("dotenv").config();
 const { getLatLng } = require("./services/place.service");
 const { getWheater } = require("./services/wheater.service");
 
