@@ -2,6 +2,8 @@ const argv = require("./config/yargs.config");
 const { getLatLng } = require("./services/place.service");
 const { getWheater } = require("./services/wheater.service");
 
+// PARA EJECUTAR LA APLICACION ESCRIBIMOS EN LA CONSOLA: node app -d <ciudad>
+
 // getLatLng(argv.direccion).then(console.log);
 // getWheater(40.75, -74.0).then(console.log).catch(console.log);
 
