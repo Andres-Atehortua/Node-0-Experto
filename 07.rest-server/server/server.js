@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+require("dotenv").config();
 //app.use suelen ser middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,6 +23,8 @@ app.delete("/user", (req, res) => res.json("delete user"));
 // app.get("/", (req, res) => res.json("Hey!"));
 // app.get("/", (req, res) => res.json("Hey!"));
 
-app.listen(process.env.PORT || 3001, () =>
-  console.log(`Servidor escuchando en el puerto ${process.env.PORT || 3001}`)
+console.log(process.env);
+
+app.listen(process.env.PORT, () =>
+  console.log(`Servidor escuchando en el puerto ${process.env.PORT}`)
 );
