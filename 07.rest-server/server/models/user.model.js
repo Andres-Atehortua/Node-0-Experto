@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
+const { Schema } = mongoose;
 
-let Schema = mongoose.Schema;
-
-let userSchema = new Schema(
+let UserSchema = new Schema(
   {
     // Al poner el required: [true, ""], en el string podemos poner el mensaje que queremos que se muestre
     name: { type: String, required: [true, "El nombre es necesario."] },
@@ -30,6 +29,11 @@ let userSchema = new Schema(
     timestamps: true,
   }
 );
-userSchema.plugin(uniqueValidator, { message: "{PATH} ya está en uso." });
+UserSchema.methods.toJSON = function () {
+  let user = this.toObject();
+  delete user.password;
+  return user;
+};
+UserSchema.plugin(uniqueValidator, { message: "{PATH} ya está en uso." });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("User", UserSchema);
