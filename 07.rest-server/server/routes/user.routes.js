@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
+const _ = require("underscore");
 
 router.get("/", (req, res) => res.json("Hey!"));
 router.get("/user", (req, res) => res.json("get user"));
@@ -25,7 +26,14 @@ router.post("/user", (req, res) => {
 
 router.put("/user/:id", (req, res) => {
   let { id } = req.params;
-  let body = req.body;
+  let body = _.pick(req.body, [
+    "name",
+    "email",
+    "username",
+    "img",
+    "role",
+    "status",
+  ]);
 
   User.findByIdAndUpdate(id, body, { new: true })
     .then((user) => res.status(202).json({ ok: true, user }))
