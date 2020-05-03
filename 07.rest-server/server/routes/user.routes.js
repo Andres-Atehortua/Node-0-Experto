@@ -5,7 +5,22 @@ const bcrypt = require("bcryptjs");
 const _ = require("underscore");
 
 router.get("/", (req, res) => res.json("Hey!"));
-router.get("/user", (req, res) => res.json("get user"));
+
+router.get("/user", (req, res) => {
+  let from = Number(req.query.from) || 0;
+  let limit = Number(req.query.limit) || 0;
+
+  let userPromise = User.find({}, "name email username img role google")
+    .skip(from)
+    .limit(limit);
+  let countPromise = User.estimatedDocumentCount();
+
+  Promise.all([userPromise, countPromise])
+    .then((results) => {
+      res.json({ users: results[0], count: results[1] });
+    })
+    .catch((err) => res.status(400).json({ ok: false, err }));
+});
 router.post("/user", (req, res) => {
   let { name, email, password, role, status, google, username } = req.body;
   // User.create({ name, email, password, img, role, status, google });
@@ -20,7 +35,7 @@ router.post("/user", (req, res) => {
   })
     .then((userDB) => res.status(201).json({ ok: true, userDB }))
     .catch((err) => {
-      res.status(400).json({ ok: false, err: err.errors });
+      res.status(400).json({ ok: false, err: err });
     });
 });
 
