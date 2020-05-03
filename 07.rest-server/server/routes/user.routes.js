@@ -2,12 +2,12 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const _ = require("underscore");
 const User = require("../models/user.model");
-const authorization = require("./../middlewares/authorization");
+const { checkRole, checkToken } = require("./../middlewares/authorization");
 
 const router = express.Router();
 
 // Ruta para obtener los registros de usuarios de forma paginada.
-router.get("/user", authorization, (req, res) => {
+router.get("/user", [checkToken], (req, res) => {
   let from = Number(req.query.from) || 0;
   let limit = Number(req.query.limit) || 0;
 
@@ -27,7 +27,7 @@ router.get("/user", authorization, (req, res) => {
 });
 
 // Ruta para crear un nuevo registro de usuario
-router.post("/user", (req, res) => {
+router.post("/user", [checkToken, checkRole], (req, res) => {
   let { name, email, password, role, status, google, username } = req.body;
   // User.create({ name, email, password, img, role, status, google });
   User.create({
@@ -45,7 +45,7 @@ router.post("/user", (req, res) => {
     });
 });
 // Ruta para modificar el registro de un usuario.
-router.put("/user/:id", (req, res) => {
+router.put("/user/:id", [checkToken, checkRole], (req, res) => {
   let { id } = req.params;
   let body = _.pick(req.body, [
     "name",
@@ -61,7 +61,7 @@ router.put("/user/:id", (req, res) => {
     .catch((err) => res.status(400).json({ ok: false, err }));
 });
 // Ruta para borrar de forma permanente un registro de usuario.
-router.delete("/user/:id", (req, res) => {
+router.delete("/user/:id", [checkToken, checkRole], (req, res) => {
   let { id } = req.params;
   User.findByIdAndRemove(id)
     .then((deletedUser) => {
@@ -75,7 +75,7 @@ router.delete("/user/:id", (req, res) => {
     .catch((err) => res.status(400).json({ ok: false, err }));
 });
 // Ruta para "banear" a un usuario sin eliminar su registro.
-router.delete("/user/ban/:id", (req, res) => {
+router.delete("/user/ban/:id", [checkToken, checkRole], (req, res) => {
   let { id } = req.params;
   User.findByIdAndUpdate(id, { status: false }, { new: true })
     .then((bannedUser) => {

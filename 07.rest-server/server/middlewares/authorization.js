@@ -1,7 +1,7 @@
 // Verificar token
 const jwt = require("jsonwebtoken");
 
-let checkToken = (req, res, next) => {
+const checkToken = (req, res, next) => {
   let token = req.get("Authorization");
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
@@ -12,4 +12,11 @@ let checkToken = (req, res, next) => {
   });
 };
 
-module.exports = checkToken;
+const checkRole = (req, res, next) => {
+  let user = req.user;
+  return user.role === "ADMIN_ROLE"
+    ? next()
+    : res.status(500).json({ ok: false, err: "Usuario no autorizado" });
+};
+
+module.exports = { checkToken, checkRole };
