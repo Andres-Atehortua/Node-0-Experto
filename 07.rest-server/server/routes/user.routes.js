@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const _ = require("underscore");
 
 router.get("/", (req, res) => res.json("Hey!"));
-
+// Ruta para obtener los registros de usuarios de forma paginada.
 router.get("/user", (req, res) => {
   let from = Number(req.query.from) || 0;
   let limit = Number(req.query.limit) || 0;
@@ -21,6 +21,8 @@ router.get("/user", (req, res) => {
     })
     .catch((err) => res.status(400).json({ ok: false, err }));
 });
+
+// Ruta para crear un nuevo registro de usuario
 router.post("/user", (req, res) => {
   let { name, email, password, role, status, google, username } = req.body;
   // User.create({ name, email, password, img, role, status, google });
@@ -38,7 +40,7 @@ router.post("/user", (req, res) => {
       res.status(400).json({ ok: false, err: err });
     });
 });
-
+// Ruta para modificar el registro de un usuario.
 router.put("/user/:id", (req, res) => {
   let { id } = req.params;
   let body = _.pick(req.body, [
@@ -54,9 +56,19 @@ router.put("/user/:id", (req, res) => {
     .then((user) => res.status(202).json({ ok: true, user }))
     .catch((err) => res.status(400).json({ ok: false, err }));
 });
-router.delete("/user", (req, res) => res.json("delete user"));
-// router.get("/", (req, res) => res.json("Hey!"));
-// router.get("/", (req, res) => res.json("Hey!"));
-// router.get("/", (req, res) => res.json("Hey!"));
+// Ruta para borrar de forma permanente un registro de usuario.
+router.delete("/user/:id", (req, res) => {
+  let { id } = req.params;
+  User.findByIdAndRemove(id)
+    .then((deletedUser) => {
+      if (!deletedUser) {
+        return res
+          .status(400)
+          .json({ ok: false, err: "Usuario no encontrado." });
+      }
+      res.json({ ok: true, deletedUser });
+    })
+    .catch((err) => res.status(400).json({ ok: false, err }));
+});
 
 module.exports = router;
