@@ -1,11 +1,13 @@
 const express = require("express");
-const router = express.Router();
-const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const _ = require("underscore");
+const User = require("../models/user.model");
+const authorization = require("./../middlewares/authorization");
+
+const router = express.Router();
 
 // Ruta para obtener los registros de usuarios de forma paginada.
-router.get("/user", (req, res) => {
+router.get("/user", authorization, (req, res) => {
   let from = Number(req.query.from) || 0;
   let limit = Number(req.query.limit) || 0;
 

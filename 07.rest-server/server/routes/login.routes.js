@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 const Usuario = require("./../models/user.model");
 
@@ -19,7 +20,12 @@ router.post("/login", (req, res) => {
           .status(400)
           .json({ ok: false, err: "Usuario o (contraseña) incorrectos" });
       }
-      res.json({ ok: true, user, token: "123" });
+
+      let token = jwt.sign({ user }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRE, // 60 * 60 es una hora * 24 es un dia * 30 son 30 dias
+      });
+
+      res.json({ ok: true, user, token });
     })
     .catch((err) => res.status(500).json({ ok: false, err }));
 });
