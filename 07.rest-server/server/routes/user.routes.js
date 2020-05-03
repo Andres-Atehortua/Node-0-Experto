@@ -10,10 +10,13 @@ router.get("/user", (req, res) => {
   let from = Number(req.query.from) || 0;
   let limit = Number(req.query.limit) || 0;
 
-  let userPromise = User.find({}, "name email username img role google")
+  let userPromise = User.find(
+    { status: true },
+    "name email username img role google, status"
+  )
     .skip(from)
     .limit(limit);
-  let countPromise = User.estimatedDocumentCount();
+  let countPromise = User.estimatedDocumentCount({ status: true });
 
   Promise.all([userPromise, countPromise])
     .then((results) => {
@@ -67,6 +70,20 @@ router.delete("/user/:id", (req, res) => {
           .json({ ok: false, err: "Usuario no encontrado." });
       }
       res.json({ ok: true, deletedUser });
+    })
+    .catch((err) => res.status(400).json({ ok: false, err }));
+});
+// Ruta para "banear" a un usuario sin eliminar su registro.
+router.delete("/user/ban/:id", (req, res) => {
+  let { id } = req.params;
+  User.findByIdAndUpdate(id, { status: false }, { new: true })
+    .then((bannedUser) => {
+      if (!bannedUser) {
+        return res
+          .status(400)
+          .json({ ok: false, err: "Usuario no encontrado." });
+      }
+      res.status(202).json({ ok: true, bannedUser });
     })
     .catch((err) => res.status(400).json({ ok: false, err }));
 });
