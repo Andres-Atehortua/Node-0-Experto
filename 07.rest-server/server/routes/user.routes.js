@@ -4,7 +4,6 @@ const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const _ = require("underscore");
 
-router.get("/", (req, res) => res.json("Hey!"));
 // Ruta para obtener los registros de usuarios de forma paginada.
 router.get("/user", (req, res) => {
   let from = Number(req.query.from) || 0;

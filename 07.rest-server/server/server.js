@@ -11,7 +11,7 @@ require("dotenv").config();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use("/", require("./routes/user.routes"));
+require("./routes")(app);
 
 mongoose
   .connect(process.env.DB, {
