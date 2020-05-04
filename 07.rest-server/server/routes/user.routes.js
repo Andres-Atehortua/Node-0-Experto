@@ -7,6 +7,7 @@ const { checkRole, checkToken } = require("./../middlewares/authorization");
 const router = express.Router();
 
 // Ruta para obtener los registros de usuarios de forma paginada.
+// router.get("/", (req, res) => res.render("index"));
 router.get("/user", [checkToken], (req, res) => {
   let from = Number(req.query.from) || 0;
   let limit = Number(req.query.limit) || 0;
