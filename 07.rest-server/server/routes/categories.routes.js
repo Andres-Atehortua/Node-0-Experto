@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { checkRole, checkToken } = require("./../middlewares/authorization");
-const Category = require("./../models/category.model");
+const { checkRole, checkToken } = require("../middlewares/authorization");
+const Category = require("../models/category.model");
 
 // Buscar todas las categorías.
 router.get("/category", (req, res) => {
   Category.find()
+    .sort("description")
     .then((categories) => res.json({ ok: true, categories }))
     .catch((err) => res.status(400).json({ ok: false, err }));
 });

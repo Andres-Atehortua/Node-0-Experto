@@ -1,12 +1,17 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-let categoriaSchema = new Schema({
+let CategorySchema = new Schema({
   description: {
     type: String,
     required: [true, "La descripción es obligatoria"],
   },
-  user: { type: Schema.Types.ObjectId, ref: "User" },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    autopopulate: { select: ["email", "username", "name"] },
+  },
 });
+CategorySchema.plugin(require("mongoose-autopopulate"));
 
-module.exports = mongoose.model("Categoria", categoriaSchema);
+module.exports = mongoose.model("Category", CategorySchema);
