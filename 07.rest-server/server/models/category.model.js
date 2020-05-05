@@ -9,7 +9,7 @@ let CategorySchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
-    autopopulate: { select: ["email", "username", "name"] },
+    autopopulate: { select: ["email", "username"] },
   },
 });
 CategorySchema.plugin(require("mongoose-autopopulate"));

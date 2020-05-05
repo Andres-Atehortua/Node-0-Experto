@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const productSchema = new Schema({
+const ProductSchema = new Schema({
   name: { type: String, required: [true, "El nombre es necesario"] },
   price: {
     type: Number,
@@ -13,10 +13,13 @@ const productSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Category",
     required: true,
-    autopopulate: true,
   },
-  user: { type: Schema.Types.ObjectId, ref: "User", autopopulate: true },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    autopopulate: { select: ["username", "email"] },
+  },
 });
-CategorySchema.plugin(require("mongoose-autopopulate"));
+ProductSchema.plugin(require("mongoose-autopopulate"));
 
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model("Product", ProductSchema);
