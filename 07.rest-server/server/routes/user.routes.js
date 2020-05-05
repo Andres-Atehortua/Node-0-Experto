@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const _ = require("underscore");
-const User = require("../models/user.model");
+const { UserModel } = require("../models");
 const { checkRole, checkToken } = require("./../middlewares/authorization");
 
 const router = express.Router();
@@ -12,13 +12,13 @@ router.get("/user", [checkToken], (req, res) => {
   let from = Number(req.query.from) || 0;
   let limit = Number(req.query.limit) || 0;
 
-  let userPromise = User.find(
+  let userPromise = UserModel.find(
     { status: true },
     "name email username img role google, status"
   )
     .skip(from)
     .limit(limit);
-  let countPromise = User.estimatedDocumentCount({ status: true });
+  let countPromise = UserModel.estimatedDocumentCount({ status: true });
 
   Promise.all([userPromise, countPromise])
     .then((results) => {
@@ -31,7 +31,7 @@ router.get("/user", [checkToken], (req, res) => {
 router.post("/user", [checkToken, checkRole], (req, res) => {
   let { name, email, password, role, status, google, username } = req.body;
   // User.create({ name, email, password, img, role, status, google });
-  User.create({
+  UserModel.create({
     name,
     username,
     email,
@@ -57,14 +57,14 @@ router.put("/user/:id", [checkToken, checkRole], (req, res) => {
     "status",
   ]);
 
-  User.findByIdAndUpdate(id, body, { new: true })
+  UserModel.findByIdAndUpdate(id, body, { new: true })
     .then((user) => res.status(202).json({ ok: true, user }))
     .catch((err) => res.status(400).json({ ok: false, err }));
 });
 // Ruta para borrar de forma permanente un registro de usuario.
 router.delete("/user/:id", [checkToken, checkRole], (req, res) => {
   let { id } = req.params;
-  User.findByIdAndRemove(id)
+  UserModel.findByIdAndRemove(id)
     .then((deletedUser) => {
       if (!deletedUser) {
         return res
@@ -78,7 +78,7 @@ router.delete("/user/:id", [checkToken, checkRole], (req, res) => {
 // Ruta para "banear" a un usuario sin eliminar su registro.
 router.delete("/user/ban/:id", [checkToken, checkRole], (req, res) => {
   let { id } = req.params;
-  User.findByIdAndUpdate(id, { status: false }, { new: true })
+  UserModel.findByIdAndUpdate(id, { status: false }, { new: true })
     .then((bannedUser) => {
       if (!bannedUser) {
         return res

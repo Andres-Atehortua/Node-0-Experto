@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { checkRole, checkToken } = require("../middlewares/authorization");
-const Category = require("../models/category.model");
+const { CategoryModel } = require("../models");
 
 // Buscar todas las categorías.
 router.get("/category", (req, res) => {
-  Category.find()
+  CategoryModel.find()
     .sort("description")
     .then((categories) => res.json({ ok: true, categories }))
     .catch((err) => res.status(400).json({ ok: false, err }));
@@ -14,7 +14,7 @@ router.get("/category", (req, res) => {
 // Buscar categoría por ID
 router.get("/category/:ID", (req, res) => {
   let { ID } = req.params;
-  Category.findById(ID)
+  CategoryModel.findById(ID)
     .then((category) => {
       if (!category) {
         return res
@@ -30,7 +30,7 @@ router.get("/category/:ID", (req, res) => {
 router.post("/category", [checkToken], (req, res) => {
   let { description } = req.body;
   let user = req.user._id;
-  Category.create({ user, description })
+  CategoryModel.create({ user, description })
     .then((createdCategory) => res.json({ ok: true, createdCategory }))
     .catch((err) => res.status(400).json({ ok: false, err }));
 });
@@ -40,7 +40,7 @@ router.put("/category/:ID", (req, res) => {
   let { ID } = req.params;
   let body = req.body;
 
-  Category.findByIdAndUpdate(ID, body, { new: true })
+  CategoryModel.findByIdAndUpdate(ID, body, { new: true })
     .then((modifiedCategory) => res.json({ ok: true, modifiedCategory }))
     .catch((err) => res.status(400).json({ ok: false, err }));
 });
@@ -48,7 +48,7 @@ router.put("/category/:ID", (req, res) => {
 // Eliminar categoria
 router.delete("/category/:ID", [checkToken, checkRole], (req, res) => {
   const { ID } = req.params;
-  Category.findByIdAndDelete(ID)
+  CategoryModel.findByIdAndDelete(ID)
     .then((deletedCategory) => {
       if (!deletedCategory) {
         return res

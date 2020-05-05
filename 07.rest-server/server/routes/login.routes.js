@@ -4,12 +4,12 @@ const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.CLIENT_ID);
 const router = express.Router();
-const Usuario = require("./../models/user.model");
+const { UserModel } = require("./../models");
 
 router.post("/login", (req, res) => {
   let { email, password } = req.body;
 
-  Usuario.findOne({ email })
+  UserModel.findOne({ email })
     .then((user) => {
       if (!user) {
         return res
@@ -57,7 +57,7 @@ router.post("/google", async (req, res) => {
   let googleUser = await verify(idtoken).catch((err) =>
     res.status(403).json({ ok: false, err })
   );
-  Usuario.findOne({ email: googleUser.email })
+  UserModel.findOne({ email: googleUser.email })
     .then((userDB) => {
       if (userDB) {
         if (!userDB.google) {
@@ -79,7 +79,7 @@ router.post("/google", async (req, res) => {
       } else {
         let { name, email, img, google } = googleUser;
         // Si no existe el usuario en la Base de Datos
-        Usuario.create({ name, email, img, google, password: ":)" })
+        UserModel.create({ name, email, img, google, password: ":)" })
           .then((user) => {
             let token = jwt.sign({ user }, process.env.JWT_SECRET, {
               expiresIn: process.env.JWT_EXPIRE,
