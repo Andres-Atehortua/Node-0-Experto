@@ -1,14 +1,25 @@
 const express = require("express");
-const app = express();
 const path = require("path");
-const bodyParser = require("body-parser");
+const socketIO = require("socket.io");
+const http = require("http");
 require("dotenv").config();
-//Esto es para poder acceder al req.body
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+
+const app = express();
+let server = http.createServer(app);
+let io = socketIO(server);
+// Puede ir así.
+// module.exports.io = socketIO(server);
+// require("./sockets");
+
 // Habilitar public
 app.use(express.static(path.resolve(__dirname, "./../public")));
 
-app.listen(process.env.PORT, () =>
+// IO = Esta es la comunicación del backend. Inputs Outputs
+
+server.listen(process.env.PORT, () =>
   console.log(`Servidor levantado en el puerto ${process.env.PORT}`)
 );
+
+// Para que funcione sockets tiene que estar asi.
+module.exports = io;
+require("./sockets");
