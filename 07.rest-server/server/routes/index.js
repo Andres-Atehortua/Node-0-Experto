@@ -4,4 +4,5 @@ module.exports = (app) => {
   app.use(require("./categories.routes"));
   app.use(require("./products.routes"));
   app.use(require("./uploads.routes"));
+  app.use(require("./images.routes"));
 };
