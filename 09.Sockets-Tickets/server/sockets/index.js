@@ -5,25 +5,23 @@ const { TicketControl } = require("./../classes");
 const ticketControl = new TicketControl();
 
 io.on("connection", (client) => {
-  console.log("USUARIO CONECTADO");
-  client.emit("enviarMensaje", {
-    usuario: "Administrador poderoso",
-    mensaje: "Bienvenido camarada.",
+  client.emit("status", {
+    actualTicket: ticketControl.getLastTicket(),
+    lastFourTickets: ticketControl.getLastFourTickets(),
   });
 
-  client.on("disconnect", () => {
-    console.log("ALGUIEN SE SALIO DEL CHAT");
+  client.on("nextTicket", (data, callback) => {
+    callback(ticketControl.next());
   });
 
-  // Escuchar el cliente
-  client.on("enviarMensaje", (data, callback) => {
-    console.log("data:", data);
+  client.on("attendTicket", (data, callback) => {
+    if (!data.desk) {
+      return callback({ ok: false, message: "El escritorio es necesario." });
+    }
+    callback(ticketControl.attendTicket(data.desk));
 
-    client.broadcast.emit("enviarMensaje", data);
-    // if (mensaje) {
-    //   callback({ respuesta: "TODO SALIO BIEN GUACHO" });
-    // } else {
-    //   callback({ mensaje: "TODO SALIO RE MAL LOCO" });
-    // }
+    client.broadcast.emit("lastFourTickets", {
+      lastFourTickets: ticketControl.getLastFourTickets(),
+    });
   });
 });
