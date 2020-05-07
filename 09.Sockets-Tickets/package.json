@@ -1,11 +1,12 @@
 {
-  "name": "08.sockets",
+  "name": "sockets-ticket-app",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/server"
+    "start": "node server/server",
+    "dev": "nodemon server/server"
   },
   "keywords": [],
   "author": "",
