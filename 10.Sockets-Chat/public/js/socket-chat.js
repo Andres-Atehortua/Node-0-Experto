@@ -20,7 +20,7 @@ socket.on("connect", () => {
   });
 });
 
-// Escuchar sucesos, en este caso una desconexion del servidor.
+// Escuchar sucesos, en este caso una desconexion del servidor
 socket.on("disconnect", () => {
   console.log("SE CAYÓ EL SERVIDOR LOCOOOOOOOO");
 });
