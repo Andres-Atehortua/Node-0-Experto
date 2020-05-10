@@ -17,26 +17,31 @@ socket.on("connect", () => {
   console.log("Conectado al mismísimo servidor del chat absoluto");
 
   socket.emit("joinChat", user, (resp) => {
-    console.log("Usuarios conectados", resp);
+    renderUsers(resp);
   });
 });
 
 // Escuchar sucesos, en este caso una desconexion del servidor
-socket.on("disconnect", () => {
-  console.log("SE CAYÓ EL SERVIDOR LOCOOOOOOOO");
-});
+socket.on("disconnect", () => console.log("SE CAYÓ EL SERVIDOR LOCOOOOOOOO"));
 
 // Escuchar sucesos, en este caso una desconexion de usuario.
 socket.on("userDisconnected", (message) => {
-  console.log(message);
+  scrollBottom();
+  renderMessages(message, false);
+});
+
+socket.on("userConnected", (message) => {
+  scrollBottom();
+  renderMessages(message, false);
 });
 
 // Escuchar cuando un usuario entra o sale del chat
-socket.on("connectedUsers", (users) => console.log(users));
+socket.on("connectedUsers", (users) => renderUsers(users));
 
 // Escuchar mensaje que envia un usuario
 socket.on("createMessage", (message) => {
-  console.log(message);
+  renderMessages(message, false);
+  scrollBottom();
 });
 
 // Mensajes privados

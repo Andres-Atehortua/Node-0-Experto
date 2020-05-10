@@ -5,8 +5,6 @@ const { createMessage } = require("./../utilities/utilities");
 const users = new Users();
 
 io.on("connection", (client) => {
-  console.log("Usuario conectado");
-
   client.on("joinChat", (data, callback) => {
     console.log(data);
     if (!data.username || !data.room) {
@@ -23,12 +21,20 @@ io.on("connection", (client) => {
       .to(data.room)
       .emit("connectedUsers", users.getUsersInRoom(data.room));
     callback(users.getUsersInRoom(data.room));
+
+    client.broadcast
+      .to(data.room)
+      .emit(
+        "userConnected",
+        createMessage("Admin", `${data.username} ha entrado en el chat.`)
+      );
   });
 
-  client.on("createMessage", (data) => {
+  client.on("createMessage", (data, callback) => {
     let user = users.getUser(client.id);
     let message = createMessage(user.username, data.message);
     client.broadcast.to(user.room).emit("createMessage", message);
+    callback(message);
   });
 
   //Mensajes privados
